@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+    <!-- Header %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    {% block header %}
+    <header class="header">
+        <h1>Mumbai Fashion</h1>
+    </header>
+    {% endblock header %}
+    
+{% block body %}
+
+    <br>
+    <br>
+    <br>
+    <!-- Flickity HTML init -->
+    <section class="carousel-container-1">
+        <div class="container">
+            <h2 class="carousel-container-1-heading"> <span> Special Products </span></h2>
+            <div class="carousel" data-flickity='{ "wrapAround": true , "autoPlay": true}'>
+                {% for prod in specials %}
+                
+                <div class="carousel-cell">
+                   <img src='/media/{{prod.image}}'  alt="" onclick="location.href='/productView/{{prod.product_id}}'"> 
+                </div>
+                {% endfor %}   
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Flickity carousel 2 HTML init -->
+
+    <section class="carousel-container-2">
+        <h2 class="carousel-container-2-heading"><span> Some Samples </span></h2>
+        <div class="carousel-2"
+            data-flickity='{ "groupCells": true, "freeScroll": true, "wrapAround": true , "autoPlay": true }'>
+
+        {% for prod in display %}
+            <div class="carousel-cell-2">
+           <a href="/productView/{{prod.product_id}}"> <img src='/media/{{prod.image}}' alt=""></a> 
+            </div>
+        {% endfor %}                
+
+        </div>
+
+      <!-- <center> <a href="/products" class="bttn btn-primary product_btn">See Products</a> </center> -->
+
+    </section>
+
+
+    <!-- About us -->
+    <section class="about-us" id="about_us">
+        <div class="about-container container">
+            <div class="about-text">
+                <h2> <span> About us </span></h2>
+                <h3>We are manufacturer & wholesaler of imitation jewellery</h3>
+                <p>We sale all over india, We are expert in all types patwa handicrafts. We take order of particular
+                    jewellery for bulk quentatie</p>
+            </div>
+            <div class="about-img">
+                <img src="{%static 'img/about2.jpg' %}" alt="About us image">
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- contact us -->
+    <section id="contact">
+        <div class="contact-container container">
+            <div class="contact-img">
+                <img src="{%static 'img/contact2(3).jpg' %}" alt="">
+            </div>
+            <div class="form-container">
+                <h2> <span> Contact us </span></h2>
+                <form action="/" id="contact-form" method="post"> {% csrf_token %}
+                    <input type="hidden" name="contact_number">
+                    <input type="text" name="user_name" placeholder="Name" required>
+                    <input type="email" name="user_email" placeholder="E-Mail" required>
+                    <input type="tel" name="phone" placeholder="Phone number" required>
+                    <textarea name="message" cols="30" rows="10" placeholder="Type your text here" required></textarea>
+
+                    <input class="btn btn-primary" type="submit" value="Send">
+                </form>
+            </div>
+        </div>
+    </section>
+
+        
+{% endblock body %} 
+    

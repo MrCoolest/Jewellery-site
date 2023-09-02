@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock title %}
+ {% block css %}
+    
+    <style>
+       .error_msg{
+               background-color: #e4c4c4;
+                padding: 5px 30px;
+             border-radius: 5px;
+
+       }
+    </style>
+
+    
+    {% endblock css %}
+
+
+{% block body %}
+
+     {% if otp %}
+
+<!-- Otp form -->
+<section class="forget-form">
+    <div class="forget-container container">
+       
+        <h1>Verify Your E-mail</h1>
+        {% if messages %}
+        {% for mess in messages %}
+        <p> <u class="error_msg">  {{mess}} </u> </p>
+        {% endfor %}
+        {% else  %}
+        <p>Please Enter the OTP</p>
+        {% endif %}
+
+        <form action="/register" method="post" onSubmit="dis()">
+            {% csrf_token %}
+        
+          <input type="hidden" name="usr" id="" value="{{usr.username}}">
+        
+          <input type="text" name="otp" id="" placeholder="Enter OTP">
+    
+            <input class="btn" id="submit" type="submit" value="Submit">
+        </form>
+        <p><a href="#" onclick="ReSendOTP('{{usr.username}}', 'Resend_otp')"> <b> <i id="Resend_otp">Resend</i> </b> OTP</a></p>
+    </div>
+</section>
+ 
+
+
+{% else %}
+
+    <!-- login form -->
+    <section class="login-form">
+        <div class="login-container container">
+            <h1>LOGIN</h1>
+         {% if messages %}
+        {% for mess in messages %}
+        <p > <u class="error_msg">  {{mess}} </u> </p>
+        {% endfor %}
+        {% else  %}
+        <p>Please enter your e-mail and password</p>
+        {% endif %}
+            <form action="/login" method="post" onSubmit="dis()">
+            {% csrf_token %}
+                <input type="email" name="email" placeholder="E-mail">
+                <div class="hideAndshow">
+                    <input type="password" id="passwd" name="passwd" placeholder="Password">
+                        <div class="password-icon" onclick="myfun()">
+                            <!-- <input type="checkbox" onclick="myFunction()" name="show-hide"><label for="show-hide">Show Password</label> -->
+                            <i id="showIcon" class="far fa-eye fa-2x"></i>
+                            <i id="hideIcon" class="far fa-eye-slash fa-2x"></i>
+                        </div>
+                    </div>
+                <input class="btn" id="submit" type="submit" value="Login">
+            </form>
+            <p>Don't have an account? <a href="/register">Create one</a> </p>
+            <br>
+            <p><a href="/password-reset/">Forgot password?</a> </p>
+        </div>
+    </section>
+    {% endif  %}
+{% endblock body %}
+
+{% block js %} 
+
+<script>
+    //Query for input fiels
+    {% if otp %}
+    var form_fields = document.getElementsByTagName('input');
+    form_fields[4].placeholder='Enter OTP';
+    form_fields[4].required = true;
+    {% else %}
+    var form_fields = document.getElementsByTagName('input');
+    //form_fields[3].placeholder='First Name';
+    form_fields[3].focus()
+    form_fields[3].required = true;
+    //form_fields[4].placeholder='Last Name';
+    form_fields[4].required = true ;
+    //form_fields[5].placeholder='E-mail';
+    //form_fields[6].placeholder='Enter Password';
+    //form_fields[7].placeholder='Re-Enter Password';
+  {% endif %}
+
+  //disable submit button
+function dis(){
+    document.getElementById('submit').disabled=true;
+    }
+
+
+  
+</script>
+{% endblock js %}

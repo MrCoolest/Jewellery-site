@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %}
+{{show.product_name}}
+{% endblock title %}
+
+
+{% block js2 %}
+
+{% endblock js2 %}
+{% block body %}
+
+
+  <!-- Product View -->
+
+   <section class="productView">
+       <div class="prod_contianer container">
+           <div class="image_box">
+               <img src="/media/{{show.image}}" alt="">
+           </div>
+
+           <div class="info_box">
+               <h2>{{show.product_name}}</h2>
+               <p class="prod_view">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Omnis maiores eum illum at sint sunt alias, voluptatum similique quibusdam. Ut atque modi sapiente. Accusamus sed, dolore fugit aperiam rerum ea recusandae corrupti odio doloribus rem. Asperiores quas mollitia incidunt at itaque quibusdam impedit aut est, cupiditate soluta repellendus maxime eos nihil. Sapiente, voluptate pariatur. Harum unde numquam, debitis fuga minus quaerat ut in obcaecati inventore veritatis placeat est eum facere eos possimus ipsa non assumenda reprehenderit ratione laudantium porro repudiandae error ducimus? Numquam eos dolorem, fugiat laudantium, quasi voluptatem dolore, expedita non sit accusantium molestias cumque quae officiis iusto aliquam.</p>
+            <br>
+            <h2> &#8377; <b> {{show.price}} </b></h2>
+        <br>
+           
+        <div class="Cart_counter">
+            <span class="inner_cart_counter">
+        {% if itemss > 0 %}
+            
+               <h3 class="counter" id="dis-hide">
+                <button class="Add update-cart" id="add" data-action="add" data-product="{{show.product_id}}">+</button>
+                <span class="item_count" id="item_count">{{itemss}} </span> 
+                <button class="Sub update-cart" id="sub" data-product="{{show.product_id}}" data-action="remove">-</button></h3>
+               <br>
+
+
+            {% else %}    
+               <button class="Add_to_cart update-cart" id="dis-hide2" data-product="{{show.product_id}}" data-action="add" onclick="">Add to Cart</button> 	&nbsp;
+               <!-- <button class="Buy_now" >Buy now</button> -->
+                
+            {% endif %}
+        </span>
+        </div>
+               <br>
+               <br>
+               <p class="bullets" ><i class="fas fa-shipping-fast"></i> &nbsp; Free Shipping</p>
+               <p class="bullets" ><i class="fas fa-exchange-alt"></i>&nbsp; 30 Days Return</p>
+               <p class="bullets" ><i class="fab fa-algolia"></i>&nbsp; 1 Year Warrenty</p>
+           </div>
+       </div>
+   </section>
+
+
+   <!-- Flickity carousel 2 HTML init -->
+
+    <section class="carousel-container-2">
+        <h2 class="carousel-container-2-heading"><span> Some Samples </span></h2>
+        <div class="carousel-2"
+            data-flickity='{ "groupCells": true, "freeScroll": true, "wrapAround": true , "autoPlay": true }'>
+
+        {% for prod in display %}
+            <div class="carousel-cell-2">
+           <a href="/productView/{{prod.product_id}}"> <img src='/media/{{prod.image}}' alt=""></a> 
+            </div>
+        {% endfor %}                
+
+        </div>
+    </section>
+
+
+{% endblock body %}
+
+

@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- flickity carousele -->
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'mains_.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+
+
+    <title>{% block title %} {% endblock title %}</title>
+
+    {% block css %}{% endblock css %}
+
+    {% block js2 %}
+    
+    {% endblock js2 %}
+
+    <script>
+        var user = '{{request.user}}'
+
+        //Cookie function
+        function getCookie(name){
+            //split cookies string and get all individual name=vlaue pairs in an Array
+            var cookieArr = document.cookie.split(";");
+
+            //loop through the array elements
+            for(var i = 0; i < cookieArr.length; i++){
+                var cookiePair = cookieArr[i].split("=");
+
+                //Removing whitespace at the beginning of the cookie name and compare it with the given string
+                if(name == cookiePair[0].trim()){
+                    //Decode the cookies value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+
+            //Return null if not found
+            return null;
+        }
+
+        var cart = JSON.parse(getCookie('cart'));
+       // console.log('Cart :',cart )
+    </script>
+
+
+   
+</head>
+
+<body>
+    <!-- Header %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    {% block header %}{% endblock header %}
+
+    <!-- Navbar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+   <nav class="navbar">
+       <div class="navbar-container container">
+        <div class="logo"><a href="{% url 'index' %}">Ankit </a></div>
+           <label for="btn" class="icon">
+               <span class="fa fa-bars"></span>
+           </label>
+           <input type="checkbox" id="btn">
+
+
+           <ul class="nav-items">
+               <li><a href="/">Home</a></li>
+               <li>
+                   <label for="btn-1" class="show">Products +</label>
+                   <a href="/products">Products</a>
+                   <input type="checkbox" id="btn-1">
+                   <ul class="show-inner">
+                      <li> <a href="/necklaces">Necklace</a> </li>
+                      <!-- <li> <a href="">Tushi</a> </li> -->
+                      <li> <a href="/rings">Ring</a> </li>
+                      <li> <a href="/earings">Earing</a> </li>
+                      <li> <a href="/bangles">Bangles</a> </li>
+                   </ul>
+               </li>
+
+               {% if full_nav == True %}
+             <li><a href="{% url 'index' %}#about_us">About</a></li> 
+               <li><a href="{% url 'index' %}#contact">Contact</a></li> 
+
+               {% endif %}
+
+                 {% if request.user.is_authenticated %}
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/cart"><i class="fas fa-shopping-cart"></i> <span>{{cartitem}}</span> </a></li>
+                {% else %}
+               <li><a href="/login">Login</a></li>
+               {% endif %}
+           </ul>
+
+       </div>
+
+   </nav>
+
+  
+    {% block body %}{% endblock body %}
+
+      <!-- Footer -->
+    <footer id="footer">
+        <h2>Mumbai Fashion &copy; all rights reseverd</h2>
+    </footer>
+    
+    <!-- flickity carousele -->
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/smooth-scrool.js' %}"></script>
+    <script src="{% static 'js/hideAndShow.js' %}"></script>
+    <script src="{% static 'js/carts.js' %}"></script>
+    <script src="{% static 'js/ajax.js' %}"></script>
+
+    {% block js %} {% endblock js %} 
+</body>
+
+</html>

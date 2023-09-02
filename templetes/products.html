@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Products{% endblock title %}
+
+
+{% block body %}
+<section class="products">
+    <h2><Span>{{heading}}</Span></h2>
+    <div class="products_container container">
+
+    {% for prod in products %}
+        <div class="items item1">
+         <a href="/productView/{{prod.product_id}}"> <img src="/media/{{prod.image}}" alt="" > </a>
+         <a href="/productView/{{prod.product_id}}"> <h4>{{prod.product_name}}</h4> </a>
+            <p> &#8377; <b> {{prod.price}} </b></p>
+        </div>
+     {% endfor %}     
+       
+    </div>
+</section>
+
+
+
+
+{% endblock body %}

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Register
+{% endblock title %}
+    {% block css %}
+    
+    <style>
+        .error_msg{
+            background-color: #e4c4c4;
+             padding: 10px 30px;
+          border-radius: 5px;
+        }
+
+        .error_para{
+            margin: 20px 0;
+        }
+    </style>
+
+    
+    {% endblock css %}
+
+
+
+
+
+
+{% block body %}
+
+{% if otp %}
+
+<!-- Otp form -->
+<section class="forget-form">
+    <div class="forget-container container">
+       
+        <h1>Verify Your E-mail</h1>
+        {% if messages %}
+        {% for mess in messages %}
+        <p class="error_para"> <u class="error_msg">  {{mess}} </u> </p>
+        {% endfor %}
+        {% else  %}
+        <p>Please Enter the OTP</p>
+        {% endif %}
+
+        <form action="/register" method="post" onSubmit="dis()">
+            {% csrf_token %}
+        
+          <input type="hidden" name="usr" id="" value="{{usr.username}}">
+        
+          <input type="text" name="otp" id="" placeholder="Enter OTP">
+    
+            <input class="btn" id="submit" type="submit" value="Submit">
+        </form>
+        <p><a href="#" onclick="ReSendOTP('{{usr.username}}', 'Resend_otp')"> <b> <i id="Resend_otp">Resend</i> </b> OTP</a></p>
+    </div>
+</section>
+ 
+
+
+{% else %}
+
+<!-- registraion form -->
+<section class="register-form">
+    <div class="register-container container">
+       {% if form.errors %}
+       {% for field in form %}
+       {% if field.errors %}
+         {% for error in field.errors %}
+         <p class="error_para"> <u class="error_msg" id="Err">{{ error }}  </u></p>
+         {% endfor %}
+       {% endif %}
+     {% endfor %}
+        {% endif %}
+        <h1>Register</h1> 
+<br>
+        <p>Please fill in the information bellow</p>
+        <form action="/register" method="post" id="regester_form" onSubmit="dis()">
+            {% csrf_token %}
+
+            {% for field in form %}
+            {{field}}
+            {% endfor %}
+            {{ form.name_of_field }}
+            <p>Password Minimum length should be 8 Character</p>
+            <input class="btn" id="submit" type="submit" value="Create">
+        </form>
+        <p>Already have? <a href="/login">Login</a></p>
+    </div>
+</section>
+{% endif %}
+
+{% endblock body %}
+
+
+<!-- <input type="text" name="fname" id="" placeholder="First name">
+<input type="text" name="lname" id="" placeholder="Last name">
+<input type="email" name="email" placeholder="E-mail">
+<div class="hideAndshow">
+<input type="password" id="passwd" name="passwd" placeholder="Password">
+    <div class="password-icon" onclick="myfun()">
+        <i id="showIcon" class="far fa-eye fa-2x"></i>
+        <i id="hideIcon" class="far fa-eye-slash fa-2x"></i>
+    </div>
+</div>
+<input class="btn" type="submit" value="Create"> -->
+
+{% block js %} 
+
+<script>
+    //Query for input fiels
+    {% if otp %}
+    var form_fields = document.getElementsByTagName('input');
+    form_fields[4].placeholder='Enter OTP';
+    form_fields[4].required = true;
+    {% else %}
+    var form_fields = document.getElementsByTagName('input');
+    form_fields[3].placeholder='First Name';
+    form_fields[3].focus()
+    form_fields[4].placeholder='Last Name';
+    form_fields[5].placeholder='E-mail';
+    form_fields[6].placeholder='Enter Password';
+    form_fields[7].placeholder='Re-Enter Password';
+  {% endif %}
+
+  //disable submit button
+function dis(){
+    document.getElementById('submit').disabled=true;
+    }
+
+    if(document.getElementById('Err').innerText == "A user with that username already exists."){
+        document.getElementById('Err').textContent = "A user with that Email already exists."
+    }
+  
+</script> 
+{% endblock js %} 

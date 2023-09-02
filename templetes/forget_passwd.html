@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Forget Password
+{% endblock title %}
+
+
+{% block body %}
+<!-- Forget_password form -->
+    <section class="forget-form">
+        <div class="forget-container container">
+            <h1>Recover</h1>
+            <p>Please Enter your email</p>
+            <form action="" method="post">
+            {% csrf_token %}
+                {% for field in form %}
+            {{field}}
+            {% endfor %}
+                <input class="btn" type="submit" value="Recover">
+            </form>
+            <p>Remember your password? <a href="/login">Back to login</a></p>
+        </div>
+    </section>
+{% endblock body %}    
+
+{% block js %} 
+
+<script>
+    //Query for input fiels
+    var form_fields = document.getElementsByTagName('input');
+    form_fields[3].placeholder='Enter Your Email';
+</script> 
+{% endblock js %} 

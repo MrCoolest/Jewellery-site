@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cart{% endblock title %}
+
+
+{% block body %}
+   
+    <!-- Cart -->
+<section class="cart_section">
+    <div class="cart_container  container">
+       
+
+         <table id="cart-table">
+              <tr>
+                <th>Product name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+              {% for item in items %}
+              <tr>
+                <td class="item-name"> <a href="/productView/{{item.product.product_id}}"> {{item.product.product_name}}</a> </td>
+                <td> <span  id="countOf_{{item.product.product_id}}"> <span class="count_{{item.product.product_id}}"> {{item.quantity}} </span> </span>  &nbsp;
+                   
+                   <div class="quantity">
+                   <button class="fas fa-sort-up fa-lg qt-btn update-cart" data-action="add" data-product="{{item.product.product_id}}">  </button> 
+                    <button class="fas fa-sort-down fa-lg qt-btn update-cart"  data-action="remove" data-product="{{item.product.product_id}}" >  </button> 
+                   </div>
+            
+              </td>
+                <td> {{item.product.price}}</td>
+                <td> {{ item.get_total }}</td>
+              </tr>
+              {% endfor %}
+                       
+            </table>
+            
+             <!-- <center>  <a href="/checkout" class="checkout-btn">Checkout</a>  <center> -->
+                <!-- {{order.get_cart_items}}
+                {{order.get_cart_total}} -->
+                <div id="empty-msg-box"></div>
+
+              </div>
+
+</section>
+
+ <!-- checkout us -->
+ <section id="checkout-section">
+    <div class="checkout-container container">
+        
+        <div class="checkout-form-container">
+            <h2> <span> Checkout </span></h2>
+            <form id="" method="post">
+                {% csrf_token %}
+                <input type="text" id="user_name" name="user_name" placeholder="Name">
+                <input type="email" id="email" name="user_email" placeholder="E-Mail">
+                <input type="tel" id="phone" name="phone" placeholder="Phone number" required>
+              <input type="text" id="address_input" name="address" placeholder="Address.." required>               
+              <input type="text" id="city" name="city" placeholder="City.." required>               
+              <input type="text" id="state" name="state" placeholder="State.." required>               
+              <input type="text" id="pin" name="pin-code" placeholder="Pin Code.." required>               
+                <input class="checkout-btn" type="submit" value="Continue to Pay">
+            </form>
+        </div>
+        
+        <div class="order-bill">
+            <!-- <img src="{%static 'img/contact.png' %}" alt=""> -->
+            <div class="order-bill-container">        
+                    <table>
+                <tr>
+                  <td>Before tax</td>
+                  <td> &#8377;  {{order.get_cart_total}}</td>
+                </tr>
+                <tr>
+                  <td> 3% GST</td>
+                  <td>&#8377; <span id="tax_on_total"></span>  </td>
+                </tr>
+                <tr class="specail-row">
+                  <td>Total to pay</td>
+                  <td>&#8377; <span id="total_to_pay"> </span> </td>
+                </tr>
+                         
+              </table> 
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Old Address -->
+<section class="old_address_section" id="old_address">
+  <div class="old_address_container container"> 
+    {% for i in old_address %}
+    <div class="all_address" id="{{i.id}}" onclick="Address(this.id)">
+      <h2>Phone Number : <span id="ph_{{i.id}}">{{i.phone_number}}</span></h2>
+      <h2>Address : <span id="addr_{{i.id}}">{{i.address}}</span></h2>
+      <h2>City :<span id="city_{{i.id}}">{{i.city}}</span></h2>
+      <h2>State :<span id="state_{{i.id}}">{{i.state}}</span></h2>
+      <h2>Pincode :<span id="pin_{{i.id}}">{{i.pincode}}</span></h2>
+
+    </div>
+    {% endfor %}
+
+  </div>
+
+</section>
+
+{% endblock body %}
+
+
+{% block js %}
+
+<script>
+    {% if thanks %}
+      alert("Your Transaction is Succecfull")
+      window.location = '/'
+    {% endif %}
+
+    let Total = {{order.get_cart_total}}
+    
+    let tax_on_total = (Total/100)*3;
+   
+    document.getElementById('tax_on_total').innerHTML = (tax_on_total).toFixed(2);
+    let total_to_pay = Total+tax_on_total;
+    document.getElementById('total_to_pay').innerHTML = total_to_pay;
+
+    let quantity = {{order.get_cart_total}}
+     if(quantity <= 0){
+      document.getElementById('checkout-section').hidden = true;
+      document.getElementById('cart-table').hidden = true;
+      document.getElementById('old_address').hidden = true;
+      let msg = `<center><h2> Please select some items for your Cart </h2></center>`
+      document.getElementById('empty-msg-box').innerHTML = msg;
+    }
+
+    if(user != 'AnonymousUser'){
+    
+      var form_fields = document.getElementsByTagName('input')
+        //form_fields[].setAttribute("type", "hidden");
+        form_fields[3].setAttribute("type", "hidden");
+        form_fields[4].setAttribute("type", "hidden");
+    }
+    
+    const phone_num = document.getElementById("phone");
+    const address_input = document.getElementById("address_input");
+    const city = document.getElementById("city");
+    const state = document.getElementById("state");
+    const pin = document.getElementById("pin");
+
+    function Address(id){
+      //console.log(id)
+     
+
+      
+      const phone_val = document.getElementById(`ph_${id}`).innerText;
+    
+      const Address_val = document.getElementById(`addr_${id}`).innerText;
+      const city_val = document.getElementById(`city_${id}`).innerText;
+      const state_val = document.getElementById(`state_${id}`).innerText;
+      const pin_val = document.getElementById(`pin_${id}`).innerText;
+      console.log(phone_val);
+      
+      phone_num.value = phone_val;
+      address_input.value = Address_val;
+      city.value = city_val;
+      state.value = state_val;
+      pin.value =  pin_val;
+      
+    }
+
+</script>
+
+
+{% endblock js %} 
